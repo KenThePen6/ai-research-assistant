@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Citation Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="ai-page">
+    <div class="container">
+        <h1 class="page-title">Metadata Extracted</h1>
+        <p><strong>Title:</strong> {{ title }}</p>
+        <p><strong>Author:</strong> {{ author }}</p>
+        <p><strong>Date:</strong> {{ date }}</p>
+        <hr class="divider">
+
+        <h2 class="page-title">Your Citations</h2>
+        <div class="citation-box"><strong>APA:</strong> {{ apa }}</div>
+        <div class="citation-box"><strong>MLA:</strong> {{ mla }}</div>
+        <div class="citation-box"><strong>Chicago:</strong> {{ chicago }}</div>
+
+        <form action="/download" method="post" class="center">
+            <input type="hidden" name="apa" value="{{ apa }}">
+            <input type="hidden" name="mla" value="{{ mla }}">
+            <input type="hidden" name="chicago" value="{{ chicago }}">
+            <button type="submit">Download Citations as TXT</button>
+        </form>
+
+        <div class="center">
+            <a href='/upload'><button>← Back</button></a>
+        </div>
+    </div>
+</body>
+
+</html>

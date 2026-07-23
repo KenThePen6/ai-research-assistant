@@ -1,0 +1,244 @@
+   GLOBAL STYLES
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body,
+html {
+    height: 100%;
+    width: 100%;
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+    overflow-x: hidden;
+}
+
+   ANIMATED FULLSCREEN BACKGROUND
+body {
+    background: linear-gradient(-45deg, #0d0d0d, #1a0000, #330000, #0d0d0d);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0% 50%
+    }
+}
+
+   CONTAINER
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+   PAGE TITLES
+.page-title {
+    text-align: center;
+    font-size: 3rem;
+    color: #ff3333;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px #ff0000;
+}
+
+.sub-header {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #cccccc;
+    margin-bottom: 30px;
+}
+
+   BUTTONS
+button {
+    background: linear-gradient(45deg, #ff0000, #ff4444);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    margin: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 0 15px #ff0000, 0 0 30px #ff4444;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px #ff6666, 0 0 50px #ff0000;
+}
+
+   LINKS
+a {
+    text-decoration: none;
+    color: #ff4444;
+}
+
+a:hover {
+    color: #ffffff;
+}
+
+   DIVIDERS
+.divider {
+    border: 0;
+    height: 2px;
+    margin: 25px 0;
+    background: linear-gradient(90deg, #ff0000, #222);
+}
+
+   FEATURE LIST STYLING
+.feature-list {
+    list-style-type: disc;
+    padding-left: 40px;
+    /* bullets closer to text */
+    margin: 15px 0 30px 0;
+    color: #ff6666;
+    line-height: 1.6;
+}
+
+   AI BOXES & PAPER CARDS
+.ai-box {
+    background: #1a1a1a;
+    border-left: 5px solid #ff0000;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 0 20px #ff0000;
+}
+
+.ai-box h2 {
+    color: #ff3333;
+    text-shadow: 0 0 8px #ff0000;
+}
+
+.ai-text {
+    color: #cccccc;
+    white-space: pre-wrap;
+}
+
+.paper-box {
+    background: #1b1b1b;
+    border-left: 4px solid #ff3333;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 15px #ff3333;
+}
+
+.paper-title {
+    font-size: 1.5rem;
+    color: #ff6666;
+    margin-bottom: 10px;
+    text-shadow: 0 0 5px #ff0000;
+}
+
+.summary-box {
+    background: #121212;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 10px;
+    box-shadow: 0 0 10px #ff0000;
+}
+
+.summary-box h4 {
+    color: #ff3333;
+}
+
+.summary-box p {
+    color: #dddddd;
+}
+
+   CENTERING UTILITIES
+.center {
+    text-align: center;
+}
+
+.LargeButtons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+
+   FOOTER
+footer {
+    text-align: center;
+    margin-top: 50px;
+    color: #888;
+}
+
+   LOAD MORE BUTTON
+.load-more {
+    display: block;
+    margin: 30px auto;
+    background: linear-gradient(45deg, #ff0000, #ff4444);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 16px;
+    box-shadow: 0 0 15px #ff0000, 0 0 30px #ff4444;
+    transition: all 0.3s ease;
+}
+
+.load-more {
+    font-size: 18px;
+    padding: 14px 28px;
+    box-shadow: 0 0 20px #ff0000, 0 0 35px #ff4444;
+}
+
+   INPUT FIELDS
+
+input[type="text"],
+input[type="url"],
+input[type="file"] {
+    width: 100%;
+    max-width: 600px;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #ff3333;
+    background-color: #1a1a1a;
+    color: #ffffff;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="url"]:focus,
+input[type="file"]:focus {
+    border: 1px solid #ff6666;
+    box-shadow: 0 0 8px #ff4444;
+}
+
+   PAPER LINK BUTTON
+
+.paper-link a {
+    display: inline-block;
+    background: linear-gradient(45deg, #ff0000, #ff4444);
+    padding: 10px 20px;
+    border-radius: 6px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 0 15px #ff0000, 0 0 25px #ff4444;
+    transition: all 0.3s ease;
+}
+
+.paper-link a:hover {
+    background: linear-gradient(45deg, #ff4444, #ff0000);
+    transform: scale(1.05);
+    box-shadow: 0 0 25px #ff6666, 0 0 40px #ff0000;
+    color: white;
+}

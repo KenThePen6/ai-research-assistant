@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Citation Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="ai-page">
+    <div class="container">
+        <h1 class="page-title">Citation Generator</h1>
+        <p class="sub-header">Upload a PDF or enter a URL to generate citations (APA, MLA, Chicago).</p>
+
+        <h2>1. Upload a PDF</h2>
+        <form action="/process_pdf" method="POST" enctype="multipart/form-data" class="center">
+            <input type="file" name="pdf_file" accept="application/pdf" required>
+            <br>
+            <button type="submit">Generate Citation</button>
+        </form>
+
+        <h2>2. Enter a Website URL</h2>
+        <form action="/process_url" method="POST" class="center">
+            <input type="text" name="url" placeholder="https://example.com/article" required>
+            <br>
+            <button type="submit">Generate Citation</button>
+        </form>
+
+        <div class="center">
+            <a href="/"><button>← Back to Home</button></a>
+        </div>
+    </div>
+</body>
+
+</html>

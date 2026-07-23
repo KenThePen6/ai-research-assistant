@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AI Research Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="ai-page">
+
+    <div class="container">
+
+        <h1 class="page-title">🔍 AI-Enhanced Research Results</h1>
+        <p class="sub-header">Search Topic: <strong>{{ query }}</strong></p>
+
+        <!-- AI EXPANDED RESEARCH QUESTION -->
+        {% if expanded_info %}
+        <div class="ai-box">
+            <h2>🤖 AI Expanded Research Question</h2>
+            <pre class="ai-text">{{ expanded_info }}</pre>
+        </div>
+        {% endif %}
+
+        <hr class="divider">
+
+        <!-- RESULTS LIST -->
+        {% for paper in papers %}
+        <div class="paper-box">
+            <h3 class="paper-title">{{ paper.title }}</h3>
+
+            <p><strong>Authors:</strong> {{ paper.authors }}</p>
+            <p><strong>Year:</strong> {{ paper.year }}</p>
+
+            <p class="paper-link">
+                <a href="{{ paper.url }}" target="_blank">View Paper →</a>
+            </p>
+
+            <div class="summary-box">
+                <h4>🤖 AI Summary</h4>
+                <p>{{ paper.summary }}</p>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- LOAD MORE BUTTON -->
+        <form action="/search" method="GET">
+            <input type="hidden" name="query" value="{{ query }}">
+            <input type="hidden" name="page" value="{{ next_page }}">
+            <button class="load-more">Load 5 More Results</button>
+        </form>
+
+        <p class="back-link">
+            <a href="/">← Back to Home</a>
+        </p>
+
+    </div>
+
+</body>
+
+</html>
