@@ -1,4 +1,4 @@
-   GLOBAL STYLES
+/* GLOBAL STYLES */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -14,7 +14,7 @@ html {
     overflow-x: hidden;
 }
 
-   ANIMATED FULLSCREEN BACKGROUND
+/* ANIMATED FULLSCREEN BACKGROUND */
 body {
     background: linear-gradient(-45deg, #0d0d0d, #1a0000, #330000, #0d0d0d);
     background-size: 400% 400%;
@@ -35,14 +35,14 @@ body {
     }
 }
 
-   CONTAINER
+/* CONTAINER */
 .container {
     max-width: 1000px;
     margin: 0 auto;
     padding: 40px 20px;
 }
 
-   PAGE TITLES
+/* PAGE TITLES */
 .page-title {
     text-align: center;
     font-size: 3rem;
@@ -58,7 +58,7 @@ body {
     margin-bottom: 30px;
 }
 
-   BUTTONS
+/* BUTTONS */
 button {
     background: linear-gradient(45deg, #ff0000, #ff4444);
     color: white;
@@ -79,7 +79,7 @@ button:hover {
     box-shadow: 0 0 25px #ff6666, 0 0 50px #ff0000;
 }
 
-   LINKS
+/* LINKS */
 a {
     text-decoration: none;
     color: #ff4444;
@@ -89,7 +89,7 @@ a:hover {
     color: #ffffff;
 }
 
-   DIVIDERS
+/* DIVIDERS */
 .divider {
     border: 0;
     height: 2px;
@@ -97,7 +97,7 @@ a:hover {
     background: linear-gradient(90deg, #ff0000, #222);
 }
 
-   FEATURE LIST STYLING
+/* FEATURE LIST STYLING */
 .feature-list {
     list-style-type: disc;
     padding-left: 40px;
@@ -107,7 +107,7 @@ a:hover {
     line-height: 1.6;
 }
 
-   AI BOXES & PAPER CARDS
+/* AI BOXES & PAPER CARDS */
 .ai-box {
     background: #1a1a1a;
     border-left: 5px solid #ff0000;
@@ -159,7 +159,7 @@ a:hover {
     color: #dddddd;
 }
 
-   CENTERING UTILITIES
+/* CENTERING UTILITIES */
 .center {
     text-align: center;
 }
@@ -171,14 +171,14 @@ a:hover {
     margin-bottom: 40px;
 }
 
-   FOOTER
+/* FOOTER */
 footer {
     text-align: center;
     margin-top: 50px;
     color: #888;
 }
 
-   LOAD MORE BUTTON
+/* LOAD MORE BUTTON */
 .load-more {
     display: block;
     margin: 30px auto;
@@ -197,8 +197,7 @@ footer {
     box-shadow: 0 0 20px #ff0000, 0 0 35px #ff4444;
 }
 
-   INPUT FIELDS
-
+/* INPUT FIELDS */
 input[type="text"],
 input[type="url"],
 input[type="file"] {
@@ -222,8 +221,7 @@ input[type="file"]:focus {
     box-shadow: 0 0 8px #ff4444;
 }
 
-   PAPER LINK BUTTON
-
+/* PAPER LINK BUTTON */
 .paper-link a {
     display: inline-block;
     background: linear-gradient(45deg, #ff0000, #ff4444);
