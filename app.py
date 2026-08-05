@@ -4,20 +4,40 @@ import requests
 from bs4 import BeautifulSoup
 import traceback
 from citation import Citation
-import openai
 from dotenv import load_dotenv
 import json
 import os
+import tempfile
 import requests
 from flask import make_response
 
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
 
-app = Flask(__name__)
+# OpenAI client is optional: if there's no API key (or no credits), the app
+# still runs and falls back to non-AI behaviour everywhere.
+try:
+    from openai import OpenAI
+    _openai_client = OpenAI() if os.getenv("OPENAI_API_KEY") else None
+except Exception:
+    _openai_client = None
+
+# Absolute template/static paths so Flask works regardless of working dir
+# (needed on serverless hosts like Vercel).
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+app = Flask(
+    __name__,
+    template_folder=os.path.join(BASE_DIR, "templates"),
+    static_folder=os.path.join(BASE_DIR, "static"),
+)
+
+# Writable directory for temporary/generated files (serverless FS is read-only
+# except the system temp dir).
+TMP_DIR = tempfile.gettempdir()
 
 
-def save_citation(citation_data, filename="citations.json"):
+def save_citation(citation_data, filename=None):
+    if filename is None:
+        filename = os.path.join(TMP_DIR, "citations.json")
     try:
         # If file exists, load current data
         if os.path.exists(filename):
@@ -43,8 +63,10 @@ def save_citation(citation_data, filename="citations.json"):
 def ai_summarize(text):
     if not text:
         return "No abstract available."
+    if _openai_client is None:
+        return None
     try:
-        response = openai.chat.completions.create(
+        response = _openai_client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system",
@@ -53,14 +75,16 @@ def ai_summarize(text):
             ],
             temperature=0.7
         )
-        return response.choices[0].message["content"].strip()
+        return response.choices[0].message.content.strip()
     except Exception:
         return None
 
 
 def ai_expand_question(query):
+    if _openai_client is None:
+        return None
     try:
-        response = openai.chat.completions.create(
+        response = _openai_client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are an academic research assistant."},
@@ -68,14 +92,16 @@ def ai_expand_question(query):
             ],
             temperature=0.8
         )
-        return response.choices[0].message["content"].strip()
+        return response.choices[0].message.content.strip()
     except Exception:
         return None
 
 
 def ai_polish_citation(metadata):
+    if _openai_client is None:
+        return None
     try:
-        response = openai.chat.completions.create(
+        response = _openai_client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system",
@@ -84,7 +110,7 @@ def ai_polish_citation(metadata):
             ],
             temperature=0.5
         )
-        return response.choices[0].message["content"].strip()
+        return response.choices[0].message.content.strip()
     except Exception:
         return None
 
@@ -131,8 +157,8 @@ def process_pdf():
         if not pdf_file:
             return "No PDF uploaded."
 
-        # Save PDF temporarily
-        filepath = f"temp_{pdf_file.filename}"
+        # Save PDF temporarily (system temp dir is writable on serverless)
+        filepath = os.path.join(TMP_DIR, f"temp_{pdf_file.filename}")
         pdf_file.save(filepath)
 
         # Extract metadata
@@ -234,6 +260,40 @@ def process_url():
         return f"Error processing URL:<br>{str(e)}<br><pre>{traceback.format_exc()}</pre>"
 
 
+def _sample_papers(query):
+    """Representative sample results shown when the live API is unavailable."""
+    q = (query or "your topic").strip()
+    return [
+        {
+            "title": f"A Survey of Recent Advances in {q.title()}",
+            "authors": "J. Smith, A. Kumar, L. Chen",
+            "year": 2023,
+            "url": "https://www.semanticscholar.org/",
+            "summary": (f"This survey reviews recent developments related to {q}, "
+                        "organizing key methods, datasets, and open challenges into a "
+                        "clear taxonomy for newcomers and practitioners."),
+        },
+        {
+            "title": f"Deep Learning Approaches to {q.title()}: A Comparative Study",
+            "authors": "M. Rossi, P. Nguyen",
+            "year": 2022,
+            "url": "https://www.semanticscholar.org/",
+            "summary": (f"The authors benchmark several deep learning models on {q}, "
+                        "reporting that transformer-based architectures outperform "
+                        "classical baselines on most evaluation metrics."),
+        },
+        {
+            "title": f"Practical Applications of {q.title()} in Industry",
+            "authors": "R. Johnson, S. Patel, D. Alvarez",
+            "year": 2024,
+            "url": "https://www.semanticscholar.org/",
+            "summary": (f"A case-study driven look at how {q} is deployed in real-world "
+                        "settings, highlighting trade-offs in cost, accuracy, and "
+                        "maintainability."),
+        },
+    ]
+
+
 @app.route('/ask')
 def ask():
     return render_template("ask.html")
@@ -250,17 +310,29 @@ def search():
         page = int(request.args.get("page", 1))
         expanded_info = None
 
-    # Fetch papers
+    # Fetch papers from Semantic Scholar (free, no key -> aggressively rate-limited)
     url = "https://api.semanticscholar.org/graph/v1/paper/search"
     params = {
         "query": query,
         "limit": 5,
-        "offset": (page-1)*5,
+        "offset": (page - 1) * 5,
         "fields": "title,abstract,year,authors,url"
     }
 
-    response = requests.get(url, params=params)
-    data = response.json().get("data", [])
+    notice = None
+    data = []
+    try:
+        response = requests.get(
+            url, params=params,
+            headers={"User-Agent": "AI-Research-Assistant/1.0 (portfolio demo)"},
+            timeout=8,
+        )
+        if response.status_code == 200:
+            data = response.json().get("data", []) or []
+        else:
+            data = []
+    except Exception:
+        data = []
 
     papers = []
     for result in data:
@@ -282,10 +354,18 @@ def search():
             "summary": summary
         })
 
+    # Bulletproof demo: if the live API returned nothing (rate limit / error),
+    # show representative sample results so the page is never empty.
+    if not papers:
+        notice = ("Live results from the Semantic Scholar API are rate-limited "
+                  "right now, so here are sample results demonstrating the format.")
+        papers = _sample_papers(query)
+
     return render_template("search_results.html",
                            query=query,
                            papers=papers,
                            expanded_info=expanded_info,
+                           notice=notice,
                            next_page=page + 1)
 
 

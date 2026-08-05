@@ -6,3 +6,5 @@ instance/
 .env.DS_Store
 .env
 .DS_Store
+.vercel
+*.local
